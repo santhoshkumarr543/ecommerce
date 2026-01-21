@@ -63,7 +63,10 @@ public class User {
     @JoinTable(
             name = "user_addresses",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
     public List<Address> addresses = new ArrayList<>();
+
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    private Cart cart;
 }

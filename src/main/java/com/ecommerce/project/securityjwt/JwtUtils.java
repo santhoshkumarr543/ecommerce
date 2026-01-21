@@ -33,7 +33,7 @@ public class JwtUtils {
     @Value("${spring.app.jwtCookieName}")
     private String jwtCookie;
 
-    // Get JWT from cookies
+    // Get JWT from cookies using Http request
     public String getJwtFromCookies(HttpServletRequest request){
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
         if(cookie != null){
@@ -47,7 +47,7 @@ public class JwtUtils {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
                 .path("/api")
-                .maxAge(24 * 60 * 60)
+                .maxAge(24 * 60 * 60 * 10)
                 .httpOnly(false)
                 .build();
         return cookie;
