@@ -11,6 +11,8 @@ import com.ecommerce.project.securityjwt.JwtUtils;
 import com.ecommerce.project.security.request.LoginRequest;
 import com.ecommerce.project.security.response.UserInfoResponse;
 import com.ecommerce.project.securityjwt.services.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +48,8 @@ public class AuthController {
     @Autowired
     PasswordEncoder encoder;
 
+    @Tag(name = "Authentication APIs", description = "APIs for managing Authentication and Authorization")
+    @Operation(summary = "Login", description = "API to login as a user or admin")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         Authentication authentication;
@@ -71,6 +75,8 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(loginResponse);
     }
 
+    @Tag(name = "Authentication APIs", description = "APIs for managing Authentication and Authorization")
+    @Operation(summary = "Signup", description = "API to create a user or admin")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
         if(userRepository.existsByUserName(signupRequest.getUsername())){
@@ -118,6 +124,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User Registered Successfully"));
     }
 
+    @Tag(name = "Authentication APIs", description = "APIs for managing Authentication and Authorization")
     @GetMapping("/username")
     public String currentUserName(Authentication authentication){
         if(authentication != null){
@@ -127,6 +134,7 @@ public class AuthController {
         }
     }
 
+    @Tag(name = "Authentication APIs", description = "APIs for managing Authentication and Authorization")
     @GetMapping("/user")
     public ResponseEntity<UserInfoResponse> getUserDetails(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -137,6 +145,7 @@ public class AuthController {
         return ResponseEntity.ok().body(loginResponse);
     }
 
+    @Tag(name = "Authentication APIs", description = "APIs for managing Authentication and Authorization")
     @PostMapping("/signout")
     public ResponseEntity<?> signOutUser(){
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
